@@ -42,7 +42,7 @@ app.get('/weather', async (req, res) => {
         }
     });
     console.log(data);
-    return res.send(200)
+    return res.send(data)
 });
 
 // event handler
