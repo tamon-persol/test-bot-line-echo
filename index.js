@@ -46,14 +46,22 @@ app.get('/weather', async (req, res) => {
 });
 
 // event handler
-function handleEvent(event) {
+async function handleEvent(event){
     if (event.type !== 'message' || event.message.type !== 'text') {
         // ignore non-text-message event
         return Promise.resolve(null);
     }
-
+    console.log(event);
     // create a echoing text message
-    const echo = { type: 'text', text: 'hello from server'};
+
+    const {data} = await axios.get('http://api.weatherstack.com/current',{
+        params: {
+            access_key: 'babf9100915e4f574c18c492a75086e9',
+            query: event.message.text
+        }
+    });
+
+    const echo = { type: 'text', text:`${data}Degree`};
 
     // use reply API
     return client.replyMessage(event.replyToken, echo);
