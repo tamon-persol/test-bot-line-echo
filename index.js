@@ -61,7 +61,7 @@ async function handleEvent(event){
         }
     });
 
-    const echo = { type: 'text', text:`${data}Degree`};
+    const echo = { type: 'text', text:`${data.current.temperature}Degree`};
 
     // use reply API
     return client.replyMessage(event.replyToken, echo);
