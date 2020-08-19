@@ -35,12 +35,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
 });
 
 app.get('/weather', async (req, res) => {
-    return res.send(await axios.get('http://api.weatherstack.com/',{
-        params: {
-            access_key: 'babf9100915e4f574c18c492a75086e9',
-            query: 'New York'
-        }
-    }))
+    return res.send(200)
 });
 
 // event handler
