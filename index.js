@@ -2,7 +2,14 @@
 
 const line = require('@line/bot-sdk');
 const express = require('express');
+const axios = require('axios').default;
 
+const instance = axios.create({
+    baseURL: 'http://api.weatherstack.com/',
+    params: {
+        access_key: 'babf9100915e4f574c18c492a75086e9'
+    }
+});
 // create LINE SDK config from env variables
 const config = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -13,7 +20,6 @@ const config = {
 const client = new line.Client(config);
 
 // create Express app
-// about Express itself: https://expressjs.com/
 const app = express();
 
 // register a webhook handler with middleware
@@ -23,14 +29,20 @@ app.post('/callback', line.middleware(config), (req, res) => {
         .all(req.body.events.map(handleEvent))
         .then((result) => res.json(result))
         .catch((err) => {
-            console.log('ERROOOORR');
             console.error(err);
             res.status(500).end();
         });
 });
 
-app.get('/', (req, res) => res.json({ test: "hook" })
-);
+app.get('/weather', async (req, res) => {
+    return await axios.get('http://api.weatherstack.com/',{
+        params: {
+            access_key: 'babf9100915e4f574c18c492a75086e9',
+            query: 'New York'
+        }
+    })
+});
+
 // event handler
 function handleEvent(event) {
     if (event.type !== 'message' || event.message.type !== 'text') {
