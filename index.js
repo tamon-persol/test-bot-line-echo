@@ -51,9 +51,8 @@ async function handleEvent(event){
         // ignore non-text-message event
         return Promise.resolve(null);
     }
-    console.log(event);
-    // create a echoing text message
 
+    // call tiers API
     const {data} = await axios.get('http://api.weatherstack.com/current',{
         params: {
             access_key: 'babf9100915e4f574c18c492a75086e9',
@@ -61,6 +60,11 @@ async function handleEvent(event){
         }
     });
 
+    if (!data.success) {
+        const echo = { type: 'text', text:'何？？'};
+        return client.replyMessage(event.replyToken, echo);
+    }
+    // create a echoing text message
     const echo = { type: 'text', text:`${data.current.temperature}Degree`};
 
     // use reply API
